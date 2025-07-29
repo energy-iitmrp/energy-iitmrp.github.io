@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inverter AC Energy Saving Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f7931e; <!-- linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc02 100%); -->
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      
+      width: 100%;
+	  max-width:1200px;
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    h1 {
+      color: #2d3748;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      grid-column: 1 / -1;
+    }
+
+    .input-group {
+      margin-bottom: 2rem;
+    }
+
+    .input-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      color: #4a5568;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .input-value {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .slider-container {
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    .slider-limits {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      color: #718096;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 3px;
+      border-radius: 3px;
+      background: #e2e8f0;
+      outline: none;
+      appearance: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(255, 107, 53, 0.6);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+    }
+
+    .slider-value {
+      position: absolute;
+      top: -35px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .slider-value::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: #ff6b35;
+    }
+
+    .result {
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      backdrop-filter: blur(5px);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .result h2 {
+      color: #2d3748;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 107, 53, 0.1);
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .result-value {
+      color: #2d3748;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .setpoint-change {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media (max-width: 968px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .result {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 2rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AC Energy Saving Calculator</h1>
+
+    <form id="calcForm">
+      <div class="input-group">
+        <div class="input-label">
+          <span>AC Capacity (tons)</span>
+          <span class="input-value" id="capacityOut">2.0</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>0.5</span>
+            <span>100.0</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="capacity" min="0.5" max="100.0" value="2.0" step="0.1">
+            <div class="slider-value" id="capacitySliderValue">2.0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span>Current Setpoint (°C)</span>
+          <span class="input-value" id="setpoint1Out">24</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>16</span>
+            <span>32</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="setpoint1" min="16.0" max="32.0" value="24.0" step="0.5">
+            <div class="slider-value" id="setpoint1SliderValue">24</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span>Proposed Setpoint (°C)</span>
+          <span class="input-value" id="setpoint2Out">25</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>16</span>
+            <span>32</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="setpoint2" min="16.0" max="32.0" value="25.0" step="0.5">
+            <div class="slider-value" id="setpoint2SliderValue">25</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span>Outdoor Temperature (°C)</span>
+          <span class="input-value" id="outdoorTempOut">35</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>25</span>
+            <span>55</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="outdoorTemp" min="25.0" max="55.0" value="35.0" step="0.1">
+            <div class="slider-value" id="outdoorTempSliderValue">35</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span>AC Daily Usage (hrs)</span>
+          <span class="input-value" id="dailyHoursOut">14</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>1</span>
+            <span>24</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="dailyHours" min="1.0" max="24.0" value="14" step="0.1">
+            <div class="slider-value" id="dailyHoursSliderValue">14</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">
+          <span>Electricity Rate (₹/kWh)</span>
+          <span class="input-value" id="rateOut">7.0</span>
+        </div>
+        <div class="slider-container">
+          <div class="slider-limits">
+            <span>1.0</span>
+            <span>25.0</span>
+          </div>
+          <div style="position: relative;">
+            <input type="range" id="rate" min="1.0" max="25.0" step="0.1" value="7.0" step="0.1">
+            <div class="slider-value" id="rateSliderValue">7.0</div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="result" id="result">
+      <h2>Results</h2>
+      <div class="result-item">
+        <span class="result-label">Setpoint Change</span>
+        <span class="result-value setpoint-change">24°C → 25°C</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Annual Energy Saving</span>
+        <span class="result-value">0.0 kWh</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Annual Cost Saving</span>
+        <span class="result-value">₹0</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Annual CO₂ Reduction</span>
+        <span class="result-value">0.00 tons</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const formElements = [
+      "capacity", "setpoint1", "setpoint2", "outdoorTemp", "dailyHours", "rate"
+    ];
+
+    formElements.forEach(id => {
+      const input = document.getElementById(id);
+      const output = document.getElementById(id + "Out");
+      const sliderValue = document.getElementById(id + "SliderValue");
+      
+      function updateSliderPosition() {
+        const value = input.value;
+        const min = input.min;
+        const max = input.max;
+        const percentage = ((value - min) / (max - min)) * 100;
+        sliderValue.style.left = `${percentage}%`;
+        sliderValue.textContent = value;
+        output.textContent = value;
+      }
+      
+      input.addEventListener("input", () => {
+        updateSliderPosition();
+        calculate();
+      });
+      
+      // Initialize position
+      updateSliderPosition();
+    });
+
+    function calculate() {
+      const capacity = parseFloat(document.getElementById("capacity").value);
+      const setpoint1 = parseFloat(document.getElementById("setpoint1").value);
+      const setpoint2 = parseFloat(document.getElementById("setpoint2").value);
+      const outdoorTemp = parseFloat(document.getElementById("outdoorTemp").value);
+      const dailyHours = parseFloat(document.getElementById("dailyHours").value);
+      const rate = parseFloat(document.getElementById("rate").value);
+
+      const ton_to_kw = 3.517;
+      const co2_emission_factor = 0.82;
+      const inverter_eff_gain = 0.02;
+
+      const delta_t1 = outdoorTemp - setpoint1;
+      const delta_t2 = outdoorTemp - setpoint2;
+      const load_ratio = delta_t1 !== 0 ? delta_t2 / delta_t1 : 1.0;
+
+      const cop_improvement_factor = 1 + inverter_eff_gain;
+      const power_ratio = load_ratio / cop_improvement_factor;
+
+      const power_full_load_kw = capacity * ton_to_kw;
+      const hours_per_year = dailyHours * 365;
+
+      const energy_before = power_full_load_kw * hours_per_year;
+      const energy_after = energy_before * power_ratio;
+	  
+      let energy_saving = energy_before - energy_after;
+	  if(setpoint1 == setpoint2){energy_saving = 0.0; }
+	  
+	  
+      const cost_saving = energy_saving * rate;
+      const co2_saving = (energy_saving * co2_emission_factor) / 1000;
+	  
+	  const trees = parseInt((co2_saving * 1000) / 9);
+
+      document.getElementById("result").innerHTML = `
+        <h2>Results</h2>
+        <div class="result-item">
+          <span class="result-label">Setpoint Change</span>
+          <span class="result-value setpoint-change">${setpoint1}°C → ${setpoint2}°C</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Annual Energy Saving</span>
+          <span class="result-value">${energy_saving.toFixed(1)} kWh</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Annual Cost Saving</span>
+          <span class="result-value">₹${Math.round(cost_saving).toLocaleString()}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Annual CO₂ Reduction</span>
+          <span class="result-value">${co2_saving.toFixed(2)} tons</span>
+        </div>
+		<div class="result-item">
+			<p>This saving is equivalent to <b>${trees}</b> Trees.🌳</p>
+		</div>
+      `;
+    }
+
+    // Initial calculation
+    calculate();
+  </script>
+</body>
+</html>
