@@ -393,6 +393,7 @@
       const rate = parseFloat(document.getElementById("rate").value);
 
       const ton_to_kw = 3.517;
+	  const COP = 4;
       const co2_emission_factor = 0.82;
       const inverter_eff_gain = 0.02;
 
@@ -400,11 +401,11 @@
       const delta_t2 = outdoorTemp - setpoint2;
       const load_ratio = delta_t1 !== 0 ? delta_t2 / delta_t1 : 1.0;
 
-      const cop_improvement_factor = 1 + inverter_eff_gain;
+      const cop_improvement_factor = 1 + (inverter_eff_gain * (setpoint2 - setpoint1));
       const power_ratio = load_ratio / cop_improvement_factor;
 
-      const power_full_load_kw = capacity * ton_to_kw;
-      const hours_per_year = dailyHours * 365;
+      const power_full_load_kw = capacity * ton_to_kw / COP;
+      const hours_per_year = dailyHours * (365/1.5);
 
       const energy_before = power_full_load_kw * hours_per_year;
       const energy_after = energy_before * power_ratio;
@@ -412,6 +413,7 @@
       let energy_saving = energy_before - energy_after;
 	  if(setpoint1 == setpoint2){energy_saving = 0.0; }
 	  
+	  const energy_saving_perc = ( energy_saving / energy_before ) * 100;
 	  
       const cost_saving = energy_saving * rate;
       const co2_saving = (energy_saving * co2_emission_factor) / 1000;
@@ -426,7 +428,7 @@
         </div>
         <div class="result-item">
           <span class="result-label">Annual Energy Saving</span>
-          <span class="result-value">${energy_saving.toFixed(1)} kWh</span>
+          <span class="result-value">${energy_saving.toFixed(1)} kWh  &nbsp; (${energy_saving_perc.toFixed(2)} %)</span>
         </div>
         <div class="result-item">
           <span class="result-label">Annual Cost Saving</span>
