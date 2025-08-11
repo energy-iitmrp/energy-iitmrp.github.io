@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heat Transfer Calculator</title>
-    <style>
-        * {
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heat Transfer Calculator</title>
+<style>
+    * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -255,10 +255,11 @@
             margin-left: 5px;
             cursor: help;
         }
-    </style>
+</style>
 </head>
 <body>
-    <div class="container">
+
+<div class="container">
         <div class="header">
             <h1>Heat Transfer Calculator</h1>
             <h3>Passive Energy Saving Calculation: Air-pipes placed beneath the ground</h3>
@@ -273,51 +274,76 @@
                 </div> -->
             </div>
 
-            <div class="input-grid">
+			<div class="input-grid">
                 <div class="input-card">
                     <div class="input-group">
                         <label class="input-label" for="ahu">
-                            AHU Capacity (TR) <span class="info-icon" title="Air Handling Unit Capacity in Tons of Refrigeration">?</span>
+                            AHU Capacity (TR): <span class="info-icon" title="Air Handling Unit Capacity in Tons of Refrigeration">?</span>
                         </label>
                         <input type="number" class="number-input" id="ahu" value="50" min="1" max="1000">
                     </div>
                 </div>
 
-                <div class="input-card">
-                    <div class="input-group">
-                        <label class="input-label" for="d_out">
-                            Pipe Outer Diameter: <span class="value-display" id="d_out_val">1.05</span> m
-                        </label>
-                        <input type="range" class="slider" id="d_out" min="0.1" max="4" step="0.01" value="1.05">
-                    </div>
-                </div>
+				<div class="input-card">
+					<div class="input-group">
+						<label class="input-label" for="t_in">
+							Outside Temperature: <span class="value-display" id="t_in_val">32</span>
+						</label>
+						<input type="range" class="slider" id="t_in" min="10" max="50" step="1" value="32">
+					</div>
+				</div>
 
-                <div class="input-card">
-                    <div class="input-group">
-                        <label class="input-label" for="v">
-                            Air Velocity: <span class="value-display" id="v_val">5.0</span> m/s
-                        </label>
-                        <input type="range" class="slider" id="v" min="0.1" max="15" step="0.1" value="5">
-                    </div>
-                </div>
+				<div class="input-card">
+					<div class="input-group">
+						<label class="input-label" for="t_out">
+							Underground Temperature: <span class="value-display" id="t_out_val">28</span>
+						</label>
+						<input type="range" class="slider" id="t_out" min="20" max="40" step="1" value="28">
+					</div> 
+				</div>
 
-                <div class="input-card">
-                    <div class="input-group">
-                        <label class="input-label" for="l">
-                            Underground Pipe Length: <span class="value-display" id="l_val">20.0</span> m
-                        </label>
-                        <input type="range" class="slider" id="l" min="0.1" max="500" step="0.1" value="20">
-                    </div>
-                </div>
-            </div>
+				<div class="input-card">
+					<div class="input-group">
+						<label class="input-label" for="d_in">
+							Pipe Diameter (Inner): <span class="value-display" id="d_in_val">1000</span>
+						</label>
+						<input type="range" class= "slider" id="d_in" min="200" max="2000" step="0.01" value="1000">
+					</diV> 
+				</div>
+				
+				
+				<div class="input-card">
+					<div class="input-group">
+						<label class= "input-label" for="thickness">
+							Pipe Thickness: <span class="value-display" id="thickness_val">5</span>
+						</label>
+						<input type="range" class= "slider" id="thickness" min="1" max="20" step="0.5" value="5">
+					</div> 
+				</div>
 
-            <div class="results-section">
+				<div class="input-card">
+					<div class="input-group">
+						<label class="input-label" for="length">
+							Pipe Length: <span class= "value-display" id= "length_val" > 250 </span>
+						</label>
+						<input type="range" class= "slider" id="length" min="50" max="1000" step="1" value="250">
+					</div>
+				</div>
+
+				<div class= "input-card">
+					<div class="input-group">
+						<label class="input-label" for="airflow">
+							Air Flow Per 180 Sqf Per TR': <span class="value-display" id="airflow_val" >300</span>
+						</label>
+						<input type="range" class="slider" id="airflow" min="200" max="400" step="1" value="300">
+					</div>
+				</div>
+</div>
+
+    <div class="results-section">
                 <h3 class="results-title">Calculated Results</h3>
                 <div class="results-grid">
-                    <div class="result-item">
-                        <div class="result-label">Pipe Inner Diameter</div>
-                        <div class="result-value"><span id="d_in_val">1.00</span> m</div>
-                    </div>
+                    
                     <div class="result-item">
                         <div class="result-label">Heat Transfer Coefficient</div>
                         <div class="result-value"><span id="U_val">0.00</span> W/m²·K</div>
@@ -335,75 +361,66 @@
         </div>
     </div>
 
-    <script>
-        // Constants
-        const rho = 1.164;  // kg/m³
-        const mu = 1.85e-5;  // Pa-s
-        const k_air = 0.0263;  // W/mK
-        const cp = 1.007e3;  // J/kg.K
-        const T_set = 25;  // °C
+<script>
+    // constants
+    const rho = 1.225; // kg/m³
+    const mu = 1.81e-5; // Pa·s
+    const cp = 1005; // J/kg·K
+    const k_air = 0.0262; // W/m·K
 
-        // Function to calculate U and Q
-        function calculateUandQ(v, l, t_out, t_in, d_out) {
-            const d_in = d_out - 0.05;
+    function calculateUandQ(l, t_out, t_in, d_in, ahu, thickness, airflow) {
+        const d_out = ((d_in + thickness)/1000);
+		d_in = d_in / 1000;  // /-in changed to meter here for aage ki calclation
+        const flow = airflow * (0.0283/60); //- 1 feet = 0.3048m. cub ft = 0.0283 cub m. cfm = 0.0283/60 cub m/sec
+        const v = (4 * flow * ahu) / (Math.PI * d_in * d_in);
+        const Ao = Math.PI * d_out * l;
+        const Ai = Math.PI * d_in * l;
+        const Re = rho * v * d_in / mu;
+        const Pr = mu * cp / k_air;
+        const Nu = 0.023 * Math.pow(Re, 0.8) * Math.pow(Pr, 0.3);
+        const hi = Nu * (k_air / d_in);
+        const ho = hi / 2 ;
+        const term1 = 1 / (hi * Ai);
+        const term2 = Math.log(d_out / d_in) / (2 * Math.PI * 205 * l);
+        const term3 = 1 / (ho * Ao);
+        const U = 1 / ((term1 + term2 + term3) * Ao );
+        const Q = U * Ao * (t_in - t_out);
+		
+        return { d_in, U, Q };
+    }
+	
+	// Function to update UI and calculate values
+    function updateValues() {
+        const t_in = parseFloat(document.getElementById("t_in").value);
+        const t_out = parseFloat(document.getElementById("t_out").value);
+        const ahu = parseFloat(document.getElementById("ahu").value);
+        const thickness = parseFloat(document.getElementById("thickness").value);
+        const d_in = parseFloat(document.getElementById("d_in").value);
+        const airflow = parseFloat(document.getElementById("airflow").value);
+        const length = parseFloat(document.getElementById("length").value);
+		
+		  
+		// Update the UI
+        document.getElementById("t_in_val").innerText = `${t_in} °C`;
+        document.getElementById("t_out_val").innerText = `${t_out} °C`;
+        document.getElementById("thickness_val").innerText = `${thickness} mm`;
+        document.getElementById("d_in_val").innerText = `${d_in.toFixed(2)} mm`;
+        document.getElementById("airflow_val").innerText = `${airflow} (CFM)`;
+        document.getElementById("length_val").innerText = `${length} m`;
 
-            // Reynolds number
-            const Re = rho * v * d_in / mu;
-            // Prandtl number
-            const Pr = mu * cp / k_air;
-            // Nusselt number
-            const Nu = 0.023 * Math.pow(Re, 0.8) * Math.pow(Pr, 0.3);
-            // Convective heat transfer coefficients
-            const hi = Nu * (k_air / d_in);
-            const ho = hi / 2;
+        const { d_in: din, U, Q } = calculateUandQ (length, t_out, t_in, d_in, ahu, thickness, airflow);
+		const c1 = ahu * 3.516 * 1000;
+		const savings = Q / c1 * 100; 
+		
+        //document.getElementById("res_din").innerText = din.toFixed(3);
+        document.getElementById("U_val").innerText = U.toFixed(3);
+        document.getElementById("Q_val").innerText = Q.toFixed(3);
+		document.getElementById("Esaving_val").innerText = savings.toFixed(3);
+    }
 
-            // Areas
-            const Ao = Math.PI * d_out * l;
-            const Ai = Math.PI * d_in * l;
+    document.querySelectorAll("input").forEach(el => el.addEventListener("input", updateValues));
+    updateValues();
+</script>
 
-            // Overall heat transfer coefficient (U)
-            const term1 = 1 / (hi * Ai);
-            const term2 = Math.log(d_out / d_in) / (2 * Math.PI * 205 * l);  // k_Al = 205 W/m·K
-            const term3 = 1 / (ho * Ao);
-            const U = 1 / ((term1 + term2 + term3) * Ao );
-
-            // Heat transfer rate (Q)
-            const Q = U * Ao * (t_in - t_out);
-
-            return { d_in, U, Q };
-        }
-
-        // Function to update UI and calculate values
-        function updateValues() {
-            const ahu = parseFloat(document.getElementById('ahu').value);
-            const d_out = parseFloat(document.getElementById('d_out').value);
-            const v = parseFloat(document.getElementById('v').value);
-            const l = parseFloat(document.getElementById('l').value);
-            const t_out = 27;  // Example output temperature
-            const t_in = 32;   // Example input temperature
-
-            // Calculate U and Q
-            const { d_in, U, Q } = calculateUandQ(v, l, t_out, t_in, d_out);
-            const esav = (Q / (3.516 * ahu * 1000)) * 100;
-
-            // Update the UI
-            document.getElementById('d_out_val').textContent = d_out.toFixed(2);
-            document.getElementById('v_val').textContent = v.toFixed(1);
-            document.getElementById('l_val').textContent = l.toFixed(1);
-            document.getElementById('d_in_val').textContent = d_in.toFixed(2);
-            document.getElementById('U_val').textContent = U.toFixed(2);
-            document.getElementById('Q_val').textContent = Q.toFixed(2);
-            document.getElementById('Esaving_val').textContent = esav.toFixed(2);
-        }
-
-        // Add event listeners for sliders and inputs
-        document.getElementById('d_out').addEventListener('input', updateValues);
-        document.getElementById('v').addEventListener('input', updateValues);
-        document.getElementById('l').addEventListener('input', updateValues);
-        document.getElementById('ahu').addEventListener('input', updateValues);
-
-        // Initial calculation on page load
-        updateValues();
-    </script>
 </body>
 </html>
